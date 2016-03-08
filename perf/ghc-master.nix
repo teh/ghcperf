@@ -6,7 +6,11 @@ let
   inherit (bootPkgs) ghc;
   srcRecord = import ./ghc-latest.nix {};
 in stdenv.mkDerivation rec {
-  version = "7.11.20151216";
+
+  # NB the version needs to match the boot libraries otherwise this
+  # doesn't build because of a constraint like "==7.11 && ==8.1" which
+  # clearly can't be true.
+  version = "8.1.20160308";
   name = "ghc-${version}";
   rev = srcRecord.rev;
 

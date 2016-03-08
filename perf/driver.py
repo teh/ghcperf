@@ -36,7 +36,7 @@ def main():
     # nix-prefetch-url doesn't work with submodules so we can't do this:
     #     real_sha256 = subprocess.check_output(['nix-prefetch-url', '-A', 'ghc.src']).strip().decode('utf8')
 
-    # Instead of nix-prefetch-url use nix-prefetch-git to get the sha256:
+    # Instead of nix-prefetch-url use nix-prefetch-git to get the sha256 (output is JSON).
     nix_prefetch_git = json.loads(subprocess.check_output(
         ['nix-prefetch-git', '--fetch-submodules', 'git://git.haskell.org/ghc.git']
     ).decode('utf8'))
