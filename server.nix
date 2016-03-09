@@ -2,7 +2,7 @@
 # export AWS_ACCESS_KEY_ID=...
 # export AWS_SECRET_ACCESS_KEY=...
 let
-    region = "us-west-2";
+    region = "us-west-1";
     common-config = {
         nix.gc.automatic = true;
         nix.gc.dates = "08:00";
@@ -41,8 +41,10 @@ rec {
     (common-config // {
         deployment.targetEnv = "ec2";
         deployment.ec2.region = region;
-        deployment.ec2.instanceType = "c3.large";
+        deployment.ec2.instanceType = "c4.large";
+#        deployment.ec2.instanceType = "t2.nano";
         deployment.ec2.spotInstancePrice = 4;
+#        deployment.ec2.ami = "ami-fd46359d";
         deployment.ec2.ebsInitialRootDiskSize = 20;
         deployment.ec2.keyPair = resources.ec2KeyPairs.waw-pair;
         deployment.ec2.securityGroups = [ resources.ec2SecurityGroups.http-ssh ];
