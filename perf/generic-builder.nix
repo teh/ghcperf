@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs
+, jailbreak-cabal, hscolour, cpphs, perf
 }:
 
 { pname
@@ -232,7 +232,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    /usr/bin/perf_4.4 stat --sync --field-separator "," --output perf.csv ${setupCommand} build ${buildTarget}
+    ${perf}/bin/perf stat --sync --field-separator "," --output perf.csv ${setupCommand} build ${buildTarget}
     runHook postBuild
   '';
 

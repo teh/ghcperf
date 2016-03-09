@@ -6,18 +6,22 @@ ghc-master = callPackage ./ghc-master.nix rec {
 };
 packages = callPackage <nixpkgs/pkgs/development/haskell-modules> {
     ghc = ghc-master;
-    compilerConfig = callPackage <nixpkgs/pkgs/development/haskell-modules/configuration-ghc-head.nix> {};
+    compilerConfig = callPackage ./configuration-ghc-head.nix {};
 };
 hp = packages.override {
   overrides = self: super: {
-    mkDerivation = haskellPackages.callPackage ./generic-builder.nix { ghc = ghc-master; };
+    mkDerivation = packages.callPackage ./generic-builder.nix { ghc = ghc-master; perf = linuxPackages.perf; };
   };
 };
+# Build 3 of each for now
 buildN = name: (builtins.listToAttrs (map (
       x: { name = "${name}-run-${toString x}";
            value = (builtins.getAttr name hp ).overrideDerivation (old: { version = "${toString x}";});
          }) [1 2 3]));
 in {
   ghc = ghc-master;
-  measure = buildN "aeson";
+  # We have to be a bit selective with the libraries we are timing
+  # because many dependencies don't build on 8.1 yet
+  # (e.g. generic-deriving needed hacks).
+  measure = buildN "text" // buildN "aeson" // buildN "pipes" // buildN "warp";
 }
