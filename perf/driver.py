@@ -25,9 +25,12 @@ def collect_output():
     def extract_name(s):
         return s.split('/')[-1]
 
-    for result in glob.glob('unique-Quang3ua-result'):
+    for result in glob.glob('unique-Quang3ua-result*'):
         for lib_path in subprocess.check_output(['nix-store', '--query', '--references', result]).decode('utf8').splitlines():
-            shutil.copyfile(os.path.join(lib_path, 'perf.csv'), 'perf-{}.csv'.format(extract_name(lib_path)))
+            perf_csv = os.path.join(lib_path, 'perf.csv')
+            if not os.path.exists(perf_csv):
+                continue
+            shutil.copyfile(perf_csv, 'perf-{}.csv'.format(extract_name(lib_path)))
 
 
 def main():
@@ -47,10 +50,11 @@ def main():
     with open('ghc-latest.nix', 'w') as f:
         f.write(TEMPLATE.format(sha256=sha256, rev=rev))
 
-    p = subprocess.Popen(['nix-build', 'default.nix', '-A', 'measure', '-j', '4', '--out-link', "unique-Quang3ua-result"])
+    p = subprocess.Popen(['nix-build', 'default.nix', '-A', 'measure', '-j', '2', '--cores', '2', '--out-link', "unique-Quang3ua-result"])
     retcode = p.wait()
     if retcode == 0:
         collect_output()
+        # TODO copy to s3
     else:
         with open('./error', 'w') as f:
             f.write("program exited with code {}".format(retcode))
