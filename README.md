@@ -12,6 +12,9 @@ This project contains a driver that checks for the most recent GHC
 HEAD every hour. If GHC HEAD changed then Nix will see a new compiler
 hash and re-build all dependent packages. If the hash is the same
 
+# Problems
+
+**PMU** - ec2 doesn't give access to PMUs. cpu-clock is pretty useless
 
 # Design decisions
 

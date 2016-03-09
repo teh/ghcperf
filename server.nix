@@ -42,14 +42,12 @@ rec {
         deployment.targetEnv = "ec2";
         deployment.ec2.region = region;
         deployment.ec2.instanceType = "c4.large";
-#        deployment.ec2.instanceType = "t2.nano";
         deployment.ec2.spotInstancePrice = 4;
-#        deployment.ec2.ami = "ami-fd46359d";
         deployment.ec2.ebsInitialRootDiskSize = 20;
         deployment.ec2.keyPair = resources.ec2KeyPairs.waw-pair;
         deployment.ec2.securityGroups = [ resources.ec2SecurityGroups.http-ssh ];
 
-        environment.systemPackages = with pkgs;[ git vim perf-tools ];
+        environment.systemPackages = with pkgs;[ git vim perf-tools linuxPackages.perf ];
 
         require = [
          ./ghcperf-module.nix

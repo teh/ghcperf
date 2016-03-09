@@ -40,9 +40,6 @@ self: super: {
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
 
-  # We have time 1.5
-  aeson = disableCabalFlag super.aeson "old-locale";
-
   # Show works differently for record syntax now, breaking haskell-src-exts' parser tests
   # https://github.com/haskell-suite/haskell-src-exts/issues/224
   haskell-src-exts = dontCheck super.haskell-src-exts;
@@ -61,9 +58,19 @@ self: super: {
 
   # Template haskell incompatability
   generic-deriving = super.callPackage ./nix-8.1/generic-deriving.nix {};
+  aeson = super.callPackage ./nix-8.1/aeson-0.11.nix {};
+
+  # No haddoc available:
+  fail = dontHaddock super.fail;
+
+  # invalidLTree: [Failed]
+  # ERROR: Data.OrdPSQ.Internal.left: empty loser tree
+  psqueues = dontCheck super.psqueues;
 
   # test suite hangs silently for at least 10 minutes
   split = dontCheck super.split;
+
+  hspec-core = dontCheck super.hspec-core;
 
   # Test suite fails with some (seemingly harmless) error.
   # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24

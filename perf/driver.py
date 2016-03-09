@@ -50,7 +50,7 @@ def main():
     with open('ghc-latest.nix', 'w') as f:
         f.write(TEMPLATE.format(sha256=sha256, rev=rev))
 
-    p = subprocess.Popen(['nix-build', 'default.nix', '-A', 'measure', '-j', '2', '--cores', '2', '--out-link', "unique-Quang3ua-result"])
+    p = subprocess.Popen(['nix-build', 'default.nix', '-A', 'measure', '--cores', '2', '--out-link', "unique-Quang3ua-result"])
     retcode = p.wait()
     if retcode == 0:
         collect_output()
