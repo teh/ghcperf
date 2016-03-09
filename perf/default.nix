@@ -13,9 +13,11 @@ hp = packages.override {
     mkDerivation = haskellPackages.callPackage ./generic-builder.nix { ghc = ghc-master; };
   };
 };
+buildN = name: (builtins.listToAttrs (map (
+      x: { name = "${name}-run-${toString x}";
+           value = (builtins.getAttr name hp ).overrideDerivation (old: { version = "${toString x}";});
+         }) [1 2 3]));
 in {
   ghc = ghc-master;
-  measure = {
-    aeson = hp.aeson.overrideDerivation (old: { version="perf-1"; });
-  };
+  measure = buildN "aeson";
 }
