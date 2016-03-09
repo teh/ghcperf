@@ -1,3 +1,4 @@
 .envrc
 conf
 aws_secrets.nix
+.ipynb_checkpoints

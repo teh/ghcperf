@@ -42,6 +42,7 @@ rec {
         deployment.targetEnv = "ec2";
         deployment.ec2.region = region;
         deployment.ec2.instanceType = "c4.large";
+        deployment.ec2.elasticIPv4 = "52.9.105.19";
         deployment.ec2.spotInstancePrice = 4;
         deployment.ec2.ebsInitialRootDiskSize = 20;
         deployment.ec2.keyPair = resources.ec2KeyPairs.waw-pair;
@@ -55,5 +56,14 @@ rec {
         services.ghcperf.package = ghcperf-driver;
         boot.kernel.sysctl."vm.swappiness" = 0;
         boot.kernel.sysctl."kernel.perf_event_paranoid" = -1;
+
+        security.acme.certs."ghcperf.wearewizards.io" = {
+          webroot = "/var/www/challenges";
+          email = "tehunger@gmail.com";
+        };
+
+        # nginx
+        services.nginx.enable = true;
+        services.nginx.config = import ./nginx.conf.nix;
     });
 }

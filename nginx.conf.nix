@@ -1,0 +1,34 @@
+let common-config = ''
+        listen          443 ssl spdy;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_stapling on;
+        ssl_stapling_verify on;
+        ssl_trusted_certificate /etc/ssl/certs/ca-bundle.crt;
+        ssl_prefer_server_ciphers on;
+        ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH E !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";
+        gzip            on;
+        gzip_min_length 1000;
+        gzip_proxied    expired no-cache no-store private auth;
+        gzip_types      text/html text/css application/json;
+    '';
+in ''
+events { }
+http {
+    server_names_hash_bucket_size  128;
+    access_log syslog:server=unix:/dev/log;
+    error_log syslog:server=unix:/dev/log;
+
+    server {
+        listen          80;
+        server_name     _;
+
+        location /.well-known/acme-challenge {
+            root /var/www/challenges;
+        }
+
+        location / {
+           return 301 https://$host$request_uri;
+        }
+    }
+}
+''

@@ -12,7 +12,7 @@ let
 in
 pkgs.stdenv.mkDerivation {
   name = "ghcperf-data";
-  buildInputs = with pkgs; [ nixUnstable python35 nix-prefetch-git s3cmd-1-6 ];
+  buildInputs = with pkgs; [ nixUnstable python35 nix-prefetch-git s3cmd-1-6 curl ];
 
   src = ./perf;
   phases = "unpackPhase buildPhase installPhase";
@@ -32,9 +32,9 @@ pkgs.stdenv.mkDerivation {
     mkdir $out
     cp *.csv $out
     echo ${latest_sha} > $out/master_sha
+    curl https://api.github.com/repos/ghc/ghc/git/commits/${latest_sha} > $out/commit_meta.json
 
-    ${s3cmd-1-6}/bin/s3cmd --version
     # AWS_* needs to be set in the environment (see ghcperf-module)
-    ${s3cmd-1-6}/bin/s3cmd --access_key="$AWS_ACCESS_KEY_ID" --secret_key="$AWS_SECRET_ACCESS_KEY" sync $out/* s3://ghcperf-results/${latest_sha}/
+    ${s3cmd-1-6}/bin/s3cmd -P --access_key="$AWS_ACCESS_KEY_ID" --secret_key="$AWS_SECRET_ACCESS_KEY" sync $out/* s3://ghcperf-results/${latest_sha}/
   '';
 }
