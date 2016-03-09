@@ -5,6 +5,8 @@ common libraries over time. It uses the Nix package manager to build
 libraries because Nix makes it trivial to change package builders to
 e.g. include performance measurements.
 
+tl;dr; Report is here: http://ghcperf-reports.s3.amazonaws.com/latest.html
+
 
 # Technical details
 
@@ -15,7 +17,8 @@ hash and re-build all dependent packages. If the hash is the same
 
 # Problems
 
-**PMU** - ec2 doesn't give access to PMUs. cpu-clock is pretty useless
+**PMU** - ec2 doesn't give access to PMUs. cpu-clock seems to be
+reasonably stable though.
 
 
 # Design decisions
@@ -24,14 +27,10 @@ hash and re-build all dependent packages. If the hash is the same
 between builds we would still be able to pinpoint performance
 regressions to a fairly small time window.
 
-**Use perf.** Perf counts CPU cycles used by the program. CPU cycle
-counts change between runs because of on non-deterministic behaviour
-in the compiler, various OS resources not being ready (EINTR etc) and
-signal handlers etc. But they are reasonably stable.
+**Use perf.** Perf counts CPU-only time which seems to be pretty
+stable over time.
 
-**Do three runs and take fastest.** Not sure why yet but runs get
-faster over time. The obvious candidate reason is buffers. In order to
-get around this we run three times and take the best time.
+**Do three runs.** To make sure the numbers are somewhat stable.
 
 
 # Data
