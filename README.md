@@ -66,3 +66,15 @@ If you've been outbid on the spot-price market try:
 ```
 nixops deploy --check --allow-recreate
 ```
+
+
+# Changing the report
+
+Run a nix-shell:
+
+```
+nix-shell -p pythonPackages.pandas pythonPackages.ipython pythonPackages.notebook pythonPackages.matplotlib pythonPackages.awscli --pure
+ipython notebook
+```
+
+In the browser go to report/report.ipynb and adjust accordingly.
