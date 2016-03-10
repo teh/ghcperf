@@ -78,3 +78,9 @@ ipython notebook
 ```
 
 In the browser go to report/report.ipynb and adjust accordingly.
+
+
+# Obvious TODOs
+
+* build arbitrary (and all) commits
+* untangle the nested nix expressions into a single driven by the commit sha

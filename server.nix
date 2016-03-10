@@ -48,7 +48,7 @@ rec {
         deployment.ec2.keyPair = resources.ec2KeyPairs.waw-pair;
         deployment.ec2.securityGroups = [ resources.ec2SecurityGroups.http-ssh ];
 
-        environment.systemPackages = with pkgs;[ git vim perf-tools linuxPackages.perf ];
+        environment.systemPackages = with pkgs;[ git vim perf-tools linuxPackages.perf screen ];
 
         require = [
          ./ghcperf-module.nix
