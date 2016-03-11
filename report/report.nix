@@ -15,6 +15,7 @@ stdenv.mkDerivation {
     ipython
     awscli
     s3cmd
+    seaborn
   ];
   buildPhase = ''
     HOME=$PWD jupyter-nbconvert --debug --execute report.ipynb
