@@ -1,3 +1,7 @@
+# THIS EXPERIMENT IS DEAD
+
+See https://www.reddit.com/r/haskell/comments/4a3h7d/measuring_ghcs_soul_crushing_compile_times/d0y3urk for context.
+
 # GHC perf
 
 This project aims to track GHC compiler performance for building
